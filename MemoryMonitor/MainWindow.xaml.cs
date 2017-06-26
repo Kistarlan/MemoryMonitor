@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using System.Windows.Threading;
+using System.Runtime.InteropServices;
 
 namespace MemoryMonitor
 {
@@ -24,16 +25,13 @@ namespace MemoryMonitor
     public partial class MainWindow : Window
     {
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
-        PerformanceCounter perfCPUCounter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
-        PerformanceCounter perfMemCounter = new PerformanceCounter("Memory", "Available MBytes");
-        PerformanceCounter perfSystemCounter = new PerformanceCounter("System", "System Up Time");
+        
+        //PerformanceCounter perfSwapFileCounter = new PerformanceCounter("Swap File", "% Usage", "\\??\\C:\\paqefile.sys");
+        GetData Data = new GetData();
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("CPU:" + " " + (int)perfCPUCounter.NextValue() + "%" +
-                "\n" + "Available Memory:" + " " + (int)perfMemCounter.NextValue() + "MB" +
-                "\n" + "System Up Time:" + " " + (int)perfSystemCounter.NextValue() / 60 / 60 + " Hours"
-                );
+
         }
         public MainWindow()
         {
@@ -41,6 +39,7 @@ namespace MemoryMonitor
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0,0,0,0,100);
             LoadBarChartData();
+            System_Data();
             dispatcherTimer.Start();
         }
 
@@ -56,13 +55,20 @@ namespace MemoryMonitor
         new KeyValuePair<string,int>("Developer", 4) };
         }
 
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        private void System_Data()
         {
-            textBlock.Text = "CPU:" + " " + (int)perfCPUCounter.NextValue() + "%" +
-                "\n" + "Available Memory:" + " " + (int)perfMemCounter.NextValue() + "MB" +
-                "\n" + "System Up Time:" + " " + (int)perfSystemCounter.NextValue() / 60 / 60 + " Hours";
+            textBlock1.Text = ("CPU: " + Data.Processor() + "\nPhysical Memory: " + Data.PhysicalMemoryName() +
+                "\nVideo Controller: " + Data.VideoController()+
+                "\nDisk mamory: " + Data.DiskSize() +
+                "\nFree space: " + Data.FreeDiskSpace());
         }
 
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            textBlock.Text = "CPU:" + " " + Data.CPUPercent() + "%" +
+                "\n" + "Available Memory:" + " " + Data.AMemory() + "MB" +
+                "\n" + "System Up Time:" + " " + Data.SysCounter() + " Hours";
+        }
 
     }
 }
