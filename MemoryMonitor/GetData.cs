@@ -58,31 +58,30 @@ namespace MemoryMonitor
         {
             object obj = BatteryProperty("BatteryLifeRemaining");
             int BatteryTime;
-            System.Windows.MessageBox.Show(obj.ToString());
             if (obj == null || !Int32.TryParse(obj.ToString(), out BatteryTime))
                 return "WARNING! Battery don't found";
             else
                 return ((BatteryTime/60/60).ToString() + "h " + (BatteryTime % (60 * 60) / 60).ToString() + "min");
         }
-        public double PageMemory()
+        public double GetPageMemory()
         {
             return ((double)(int)perfPageBCounter.NextValue())/1024/1024/1024;
         }
-        public double NPageMemory()
+        public double GetNPageMemory()
         {
             return ((double)(int)perfNPageBCounter.NextValue()) / 1024 / 1024 / 1024;
         }
 
-        public int CPUPercent()
+        public int GetCurrentCpuUsage()
         {
             return (int)perfCPUCounter.NextValue();
         }
-        public int AMemory()
+        public int GetCurrentMemoryAvailability()
         {
             return (int)perfMemCounter.NextValue();
         }
 
-        public int SysCounter()
+        public int GetTimeWorkSystem()
         {
            return (int)perfSystemCounter.NextValue() / 60 / 60;
         }
@@ -114,12 +113,12 @@ namespace MemoryMonitor
             return GetComponent("Win32_PhysicalMemory", "Name");
         }
 
-        public string DiskSize()
+        public string GetDiskSize()
         {
             return Convert.ToString(ToGBytes(  GetComponent("Win32_LogicalDisk", "Size"))+ "GB");
         }
 
-        public string FreeDiskSpace()
+        public string GetFreeDiskSpace()
         {
             const int HARD_DISK = 3;
             string strComputer = ".";

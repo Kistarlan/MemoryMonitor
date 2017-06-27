@@ -4,23 +4,34 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:DV="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-        xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
 
         xmlns:local="clr-namespace:MemoryMonitor"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="700">
+    <Window.Resources>
+        <Style x:Key="Chart">
+            <Setter Property="Control.Background" Value="#394048" />
+            <Setter Property="Control.Foreground" Value="#169cf1" />
+            <Setter Property="Control.Margin" Value="10" />
+            <Setter Property="Control.Margin" Value="10" />
+        </Style>
+    </Window.Resources>
     <Grid>
-        <DVC:Chart Canvas.Top="80" Canvas.Left="10" Name="mcChart" 
-        Width="400" Height="250"
-        Background="LightSteelBlue">
-            <DVC:Chart.Series>
-                <DVC:ColumnSeries Title="Experience" 
-                    IndependentValueBinding="{Binding Path=Key}"
-                    DependentValueBinding="{Binding Path=Value}">
-                    </DVC:ColumnSeries>
-            </DVC:Chart.Series>
-            </DVC:Chart>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="592,338,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+
+        <Grid>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+	VerticalScrollBarVisibility="Auto" >
+                <Grid Height="921">
+                    <chartingToolkit:Chart  Name="CPUlineChart" Title="CPU Usage" 
+                    VerticalAlignment="Top" Height="254" Style="{StaticResource Chart}">
+                        <chartingToolkit:LineSeries  DependentValuePath="Value" 
+                    IndependentValuePath="Key" ItemsSource="{Binding}" 
+                    IsSelectionEnabled="True"/>
+                    </chartingToolkit:Chart>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="63,494,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="376,494,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 
