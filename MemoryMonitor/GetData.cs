@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Management;
+using System.Windows.Forms;
+using System.Reflection;
 
 namespace MemoryMonitor
 {
@@ -15,13 +17,60 @@ namespace MemoryMonitor
         PerformanceCounter perfCPUCounter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
         PerformanceCounter perfMemCounter = new PerformanceCounter("Memory", "Available MBytes");
         PerformanceCounter perfSystemCounter = new PerformanceCounter("System", "System Up Time");
+        PerformanceCounter perfPageBCounter = new PerformanceCounter("Memory", "Pool Paged Bytes", null);
+        PerformanceCounter perfNPageBCounter = new PerformanceCounter("Memory", "Pool Nonpaged Bytes", null);
 
+        private object BatteryProperty(string PropertyName)
+        {
+            Type t = typeof(System.Windows.Forms.PowerStatus);
+            PropertyInfo[] pi = t.GetProperties();
+            PropertyInfo prop = null;
+            foreach (PropertyInfo propinf in pi)
+            {
+                if (propinf.Name == PropertyName)//"BatteryLifePercent")
+                    prop = propinf;
+            }
+            if (prop == null)
+                return null;
+            else
+                return prop.GetValue(SystemInformation.PowerStatus, null);
+        }
+        
         public string ToGBytes(string memory)
         {
             Int64 Memory;
             Int64.TryParse(memory, out Memory);
             return ((int)(((double)Memory) / 1024 / 1024 / 1024)).ToString();
           
+        }
+
+        public string GetChargeStatus()
+        {
+            object obj = BatteryProperty("BatteryLifePercent");
+            double BatteryPercent;
+            if (obj == null || !Double.TryParse(obj.ToString(), out BatteryPercent))
+                return "WARNING! Battery don't found";
+            else
+                return ((BatteryPercent*100).ToString() + "%");
+        }
+
+        public string GetChargeTime()
+        {
+            object obj = BatteryProperty("BatteryLifeRemaining");
+            int BatteryTime;
+            System.Windows.MessageBox.Show(obj.ToString());
+            if (obj == null || !Int32.TryParse(obj.ToString(), out BatteryTime))
+                return "WARNING! Battery don't found";
+            else
+                return ((BatteryTime/60/60).ToString() + "h " + (BatteryTime % (60 * 60) / 60).ToString() + "min");
+        }
+        public double PageMemory()
+        {
+            return ((double)(int)perfPageBCounter.NextValue())/1024/1024/1024;
+        }
+        public double NPageMemory()
+        {
+            return ((double)(int)perfNPageBCounter.NextValue()) / 1024 / 1024 / 1024;
         }
 
         public int CPUPercent()

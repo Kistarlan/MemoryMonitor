@@ -60,7 +60,11 @@ namespace MemoryMonitor
             textBlock1.Text = ("CPU: " + Data.Processor() + "\nPhysical Memory: " + Data.PhysicalMemoryName() +
                 "\nVideo Controller: " + Data.VideoController()+
                 "\nDisk mamory: " + Data.DiskSize() +
-                "\nFree space: " + Data.FreeDiskSpace());
+                "\nFree space: " + Data.FreeDiskSpace() +
+                "\nCharge Status: " + Data.GetChargeStatus() +
+                "\nRemaining Time: " + Data.GetChargeTime() +
+                "\nPool Page Gb: " + Data.PageMemory() +
+                "\nNon Pool Page Gb: " + Data.NPageMemory());
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
