@@ -29,7 +29,7 @@ namespace MemoryMonitor
         private void showColumnChart()
         {
             //Setting data for line chart
-            CPUlineChart.DataContext = valueList;
+            //CPUlineChart.DataContext = valueList;
         }
 
         public delegate void CPUEventHandler(object sender, float args);
@@ -68,35 +68,39 @@ namespace MemoryMonitor
         public MainWindow()
         {
             InitializeComponent();
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0,0,0,0,100);
+            //dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            //dispatcherTimer.Interval = new TimeSpan(0,0,0,0,100);
+            //StartUpTimeText.Text = " " + Data.GetTimeWorkSystem() + " Hours";
+            StartUpTimeText1.Text = " " + Data.GetTimeWorkSystem();
+            //MessageBox.Show("Cashe: " + Data.GetCasheMemory() + 
+            //    "\nCommited mamory: " + Data.GetCommitedGB() + "/" + Data.GetMaxCommitedGB());
+            //MessageBox.Show(Data.GetTotalRAM().ToString());
+            //timer.Interval = TimeSpan.FromSeconds(1);
+            //timer.Tick += TimeChanged;
+            //timer.Start();
 
+            //showColumnChart();
 
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += TimeChanged;
-            timer.Start();
-
-            showColumnChart();
-
-            System_Data();
-            dispatcherTimer.Start();
+            //System_Data();
+            //dispatcherTimer.Start();
         }
 
 
         private void System_Data()
         {
-            textBlock1.Text = ("CPU: " + Data.Processor() + "\nPhysical Memory: " + Data.PhysicalMemoryName() +
-                "\nVideo Controller: " + Data.VideoController() +
-                "\nDisk mamory: " + Data.GetDiskSize() +
-                "\nFree space: " + Data.GetFreeDiskSpace() +
-                "\nCharge Status: " + Data.GetChargeStatus() +
-                "\nRemaining Time: " + Data.GetChargeTime() +
-                "\nPool Page Gb: " + Data.GetPageMemory() +
-                "\nNon Pool Page Gb: " + Data.GetNPageMemory());
+            //textBlock1.Text = ("CPU: " + Data.Processor() + "\nPhysical Memory: " + Data.PhysicalMemoryName() +
+            //    "\nVideo Controller: " + Data.VideoController() +
+            //    "\nDisk mamory: " + Data.GetDiskSize() +
+            //    "\nFree space: " + Data.GetFreeDiskSpace() +
+            //    "\nCharge Status: " + Data.GetChargeStatus() +
+            //    "\nRemaining Time: " + Data.GetChargeTime() +
+            //    "\nPool Page Gb: " + Data.GetPageMemory() +
+            //    "\nNon Pool Page Gb: " + Data.GetNPageMemory());
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            StartUpTimeText.Text = " " + Data.GetTimeWorkSystem() + " Hours";
             //textBlock.Text = "CPU:" + " " + Data.CPUPercent() + "%" +
             //    "\n" + "Available Memory:" + " " + Data.AMemory() + "MB" +
             //    "\n" + "System Up Time:" + " " + Data.SysCounter() + " Hours";

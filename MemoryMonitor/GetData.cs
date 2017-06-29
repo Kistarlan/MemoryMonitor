@@ -9,16 +9,17 @@ using System.Windows;
 using System.Management;
 using System.Windows.Forms;
 using System.Reflection;
+using Microsoft.VisualBasic.Devices;
 
 namespace MemoryMonitor
 {
     class GetData
     {
-        PerformanceCounter perfCPUCounter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
-        PerformanceCounter perfMemCounter = new PerformanceCounter("Memory", "Available MBytes");
-        PerformanceCounter perfSystemCounter = new PerformanceCounter("System", "System Up Time");
-        PerformanceCounter perfPageBCounter = new PerformanceCounter("Memory", "Pool Paged Bytes", null);
-        PerformanceCounter perfNPageBCounter = new PerformanceCounter("Memory", "Pool Nonpaged Bytes", null);
+        
+       
+        
+        
+        
 
         private object BatteryProperty(string PropertyName)
         {
@@ -40,10 +41,13 @@ namespace MemoryMonitor
         {
             Int64 Memory;
             Int64.TryParse(memory, out Memory);
-            return ((int)(((double)Memory) / 1024 / 1024 / 1024)).ToString();
-          
+            return ((int)(((double)Memory) / 1024 / 1024 / 1024)).ToString(); 
         }
 
+        public string ToGBytes(float memory)
+        {
+            return  Math.Round(((double)(memory) / 1024 / 1024 / 1024), 2).ToString();
+        }
         public string GetChargeStatus()
         {
             object obj = BatteryProperty("BatteryLifePercent");
@@ -63,27 +67,58 @@ namespace MemoryMonitor
             else
                 return ((BatteryTime/60/60).ToString() + "h " + (BatteryTime % (60 * 60) / 60).ToString() + "min");
         }
-        public double GetPageMemory()
+        public string GetPageMemory()
         {
-            return ((double)(int)perfPageBCounter.NextValue())/1024/1024/1024;
+            PerformanceCounter perfPageBCounter = new PerformanceCounter("Memory", "Pool Paged Bytes", null);
+            return ToGBytes(perfPageBCounter.NextValue());
         }
-        public double GetNPageMemory()
+        public string GetCasheMemory()
         {
-            return ((double)(int)perfNPageBCounter.NextValue()) / 1024 / 1024 / 1024;
+            PerformanceCounter perfCasheCounter = new PerformanceCounter("Memory", "Cache Bytes", null);
+            return ToGBytes(perfCasheCounter.NextValue());
         }
+        public string GetNPageMemory()
+        {
+            PerformanceCounter perfNPageBCounter = new PerformanceCounter("Memory", "Pool Nonpaged Bytes", null);
+            return ToGBytes(perfNPageBCounter.NextValue());
+        }
+
+        public string GetCommitedGB()
+        {
+            PerformanceCounter perfCommitCounter = new PerformanceCounter("Memory", "Committed Bytes", null);
+            return ToGBytes(perfCommitCounter.NextValue());
+        }
+
+        public string GetMaxCommitedGB()
+        {
+            PerformanceCounter perfMaxCommitCounter = new PerformanceCounter("Memory", "Commit Limit", null);
+            return ToGBytes(perfMaxCommitCounter.NextValue());
+        }
+
 
         public int GetCurrentCpuUsage()
         {
+            PerformanceCounter perfCPUCounter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
             return (int)perfCPUCounter.NextValue();
         }
         public int GetCurrentMemoryAvailability()
         {
+            PerformanceCounter perfMemCounter = new PerformanceCounter("Memory", "Available MBytes");
             return (int)perfMemCounter.NextValue();
         }
 
-        public int GetTimeWorkSystem()
+        public string GetTotalRAM()
         {
-           return (int)perfSystemCounter.NextValue() / 60 / 60;
+            ComputerInfo TPM = new ComputerInfo();
+            return ToGBytes((float)TPM.TotalPhysicalMemory);
+        }
+        public string GetTimeWorkSystem()
+        {
+            PerformanceCounter perfSystemCounter = new PerformanceCounter("System", "System Up Time");
+            perfSystemCounter.NextValue();
+            int seconds_time = (int)perfSystemCounter.NextValue();
+            
+           return (seconds_time/3600).ToString() + "h " + ((seconds_time % 3600) / 60) + "min";
         }
 
         public string GetComponent(string hwclass, string syntax)
@@ -98,17 +133,17 @@ namespace MemoryMonitor
             return Name;
         }
 
-        public string Processor()
+        public string GetProcessorName()
         {
             return GetComponent("Win32_Processor", "Name");
         }
 
-        public string VideoController()
+        public string GetVideoControllerName()
         {
             return GetComponent("Win32_VideoController", "Name");
         }
 
-        public string PhysicalMemoryName()
+        public string GetPhysicalMemoryName()
         {
             return GetComponent("Win32_PhysicalMemory", "Name");
         }

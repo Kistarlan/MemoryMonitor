@@ -8,32 +8,38 @@
 
         xmlns:local="clr-namespace:MemoryMonitor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="700">
+        Title="Monitory report" Height="700" Width="700">
     <Window.Resources>
-        <Style x:Key="Chart">
+        <Style x:Key="Grid">
             <Setter Property="Control.Background" Value="#394048" />
             <Setter Property="Control.Foreground" Value="#169cf1" />
-            <Setter Property="Control.Margin" Value="10" />
-            <Setter Property="Control.Margin" Value="10" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Control.Foreground" Value="#dcd5f4"/>
+            <Setter Property="Control.FontSize" Value="16"/>
+            <Setter Property="Control.Margin" Value="4"/>
         </Style>
     </Window.Resources>
-    <Grid>
+    
+    <Grid Style="{StaticResource Grid}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
 
-        <Grid>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
-	VerticalScrollBarVisibility="Auto" >
-                <Grid Height="921">
-                    <chartingToolkit:Chart  Name="CPUlineChart" Title="CPU Usage" 
-                    VerticalAlignment="Top" Height="254" Style="{StaticResource Chart}">
-                        <chartingToolkit:LineSeries  DependentValuePath="Value" 
-                    IndependentValuePath="Key" ItemsSource="{Binding}" 
-                    IsSelectionEnabled="True"/>
-                    </chartingToolkit:Chart>
-                </Grid>
-            </ScrollViewer>
-        </Grid>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="63,494,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-        <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="376,494,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"  Margin="20 10 0 0 ">
+                <TextBlock x:Name="StartUpTimeText" >
+                    Time from start up:
+                </TextBlock>
+                <TextBlock x:Name="StartUpTimeText1"  >Time</TextBlock>
+        </StackPanel>
+        <Line X1="0" Y1="40" X2="1500" Y2="40" Stroke="#91fffc" Grid.ColumnSpan="3" Opacity="0.7"/>
 
     </Grid>
 </Window>
