@@ -17,19 +17,20 @@ using System.Diagnostics;
 using System.Windows.Threading;
 using System.Runtime.InteropServices;
 using System.Collections.ObjectModel;
+using MahApps.Metro.Controls;
 
 namespace MemoryMonitor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow :Window
     {
         ObservableCollection<KeyValuePair<DateTime, float>> valueList = new ObservableCollection<KeyValuePair<DateTime, float>>();
         private void showColumnChart()
         {
             //Setting data for line chart
-            //CPUlineChart.DataContext = valueList;
+           //CPUlineChart.DataContext = valueList;
         }
 
         public delegate void CPUEventHandler(object sender, float args);
@@ -49,7 +50,7 @@ namespace MemoryMonitor
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
         public void TimeChanged(object sender, EventArgs e)
         {
-            cpuCurrent = Data.GetCurrentCpuUsage();
+            cpuCurrent = (float)Data.GetCurrentCpuUsage();
 
             TriggerCPUEvent(cpuCurrent);
 
@@ -68,8 +69,8 @@ namespace MemoryMonitor
         public MainWindow()
         {
             InitializeComponent();
-            //dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            //dispatcherTimer.Interval = new TimeSpan(0,0,0,0,100);
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0,0,0,0,100);
             //StartUpTimeText.Text = " " + Data.GetTimeWorkSystem() + " Hours";
             StartUpTimeText1.Text = " " + Data.GetTimeWorkSystem();
             //MessageBox.Show("Cashe: " + Data.GetCasheMemory() + 
@@ -82,7 +83,9 @@ namespace MemoryMonitor
             //showColumnChart();
 
             //System_Data();
-            //dispatcherTimer.Start();
+
+            CpuSpeed.ChartSubTitle ="Maximum speed: " + Data.CPUSpeed().ToString() + " GHz";
+            dispatcherTimer.Start();
         }
 
 
@@ -100,10 +103,10 @@ namespace MemoryMonitor
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            StartUpTimeText.Text = " " + Data.GetTimeWorkSystem() + " Hours";
-            //textBlock.Text = "CPU:" + " " + Data.CPUPercent() + "%" +
-            //    "\n" + "Available Memory:" + " " + Data.AMemory() + "MB" +
-            //    "\n" + "System Up Time:" + " " + Data.SysCounter() + " Hours";
+            CPUProgressBar.Value = Data.GetCurrentCpuUsage();
+            TextCPU.Text = System.String.Format("{0,3:N2}%",CPUProgressBar.Value);
+            RAMProgressBar.Value = Data.GetCommitedInUse();
+            TextRAM.Text = System.String.Format("{0,3:N2}%", RAMProgressBar.Value);
         }
 
     }

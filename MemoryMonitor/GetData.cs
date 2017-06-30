@@ -15,12 +15,6 @@ namespace MemoryMonitor
 {
     class GetData
     {
-        
-       
-        
-        
-        
-
         private object BatteryProperty(string PropertyName)
         {
             Type t = typeof(System.Windows.Forms.PowerStatus);
@@ -36,17 +30,17 @@ namespace MemoryMonitor
             else
                 return prop.GetValue(SystemInformation.PowerStatus, null);
         }
-        
+
         public string ToGBytes(string memory)
         {
             Int64 Memory;
             Int64.TryParse(memory, out Memory);
-            return ((int)(((double)Memory) / 1024 / 1024 / 1024)).ToString(); 
+            return ((int)(((double)Memory) / 1024 / 1024 / 1024)).ToString();
         }
 
-        public string ToGBytes(float memory)
+        public double ToGBytes(float memory)
         {
-            return  Math.Round(((double)(memory) / 1024 / 1024 / 1024), 2).ToString();
+            return Math.Round(((double)(memory) / 1024 / 1024 / 1024), 2);
         }
         public string GetChargeStatus()
         {
@@ -55,7 +49,7 @@ namespace MemoryMonitor
             if (obj == null || !Double.TryParse(obj.ToString(), out BatteryPercent))
                 return "WARNING! Battery don't found";
             else
-                return ((BatteryPercent*100).ToString() + "%");
+                return ((BatteryPercent * 100).ToString() + "%");
         }
 
         public string GetChargeTime()
@@ -65,49 +59,53 @@ namespace MemoryMonitor
             if (obj == null || !Int32.TryParse(obj.ToString(), out BatteryTime))
                 return "WARNING! Battery don't found";
             else
-                return ((BatteryTime/60/60).ToString() + "h " + (BatteryTime % (60 * 60) / 60).ToString() + "min");
+                return ((BatteryTime / 60 / 60).ToString() + "h " + (BatteryTime % (60 * 60) / 60).ToString() + "min");
         }
-        public string GetPageMemory()
+        PerformanceCounter perfPageBCounter = new PerformanceCounter("Memory", "Pool Paged Bytes", null);
+        public double GetPageMemory()
         {
-            PerformanceCounter perfPageBCounter = new PerformanceCounter("Memory", "Pool Paged Bytes", null);
             return ToGBytes(perfPageBCounter.NextValue());
         }
-        public string GetCasheMemory()
+        PerformanceCounter perfCasheCounter = new PerformanceCounter("Memory", "Cache Bytes", null);
+        public double GetCasheMemory()
         {
-            PerformanceCounter perfCasheCounter = new PerformanceCounter("Memory", "Cache Bytes", null);
             return ToGBytes(perfCasheCounter.NextValue());
         }
-        public string GetNPageMemory()
+        PerformanceCounter perfNPageBCounter = new PerformanceCounter("Memory", "Pool Nonpaged Bytes", null);
+        public double GetNPageMemory()
         {
-            PerformanceCounter perfNPageBCounter = new PerformanceCounter("Memory", "Pool Nonpaged Bytes", null);
             return ToGBytes(perfNPageBCounter.NextValue());
         }
 
-        public string GetCommitedGB()
+        PerformanceCounter perfCommitCounter = new PerformanceCounter("Memory", "Committed Bytes", null);
+        public double GetCommitedGB()
         {
-            PerformanceCounter perfCommitCounter = new PerformanceCounter("Memory", "Committed Bytes", null);
             return ToGBytes(perfCommitCounter.NextValue());
         }
 
-        public string GetMaxCommitedGB()
+        PerformanceCounter perfCommitCounterInUse = new PerformanceCounter("Memory", "% Committed Bytes In Use", null);
+        public double GetCommitedInUse()
         {
-            PerformanceCounter perfMaxCommitCounter = new PerformanceCounter("Memory", "Commit Limit", null);
+            return perfCommitCounterInUse.NextValue();
+        }
+        PerformanceCounter perfMaxCommitCounter = new PerformanceCounter("Memory", "Commit Limit", null);
+        public double GetMaxCommitedGB()
+        {
             return ToGBytes(perfMaxCommitCounter.NextValue());
         }
 
-
-        public int GetCurrentCpuUsage()
+        PerformanceCounter perfCPUCounter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
+        PerformanceCounter perfMemCounter = new PerformanceCounter("Memory", "Available MBytes");
+        public double GetCurrentCpuUsage()
         {
-            PerformanceCounter perfCPUCounter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
-            return (int)perfCPUCounter.NextValue();
+            return perfCPUCounter.NextValue();
         }
-        public int GetCurrentMemoryAvailability()
+        public double GetCurrentMemoryAvailability()
         {
-            PerformanceCounter perfMemCounter = new PerformanceCounter("Memory", "Available MBytes");
-            return (int)perfMemCounter.NextValue();
+            return perfMemCounter.NextValue()/1024;
         }
 
-        public string GetTotalRAM()
+        public double GetTotalRAM()
         {
             ComputerInfo TPM = new ComputerInfo();
             return ToGBytes((float)TPM.TotalPhysicalMemory);
@@ -117,8 +115,8 @@ namespace MemoryMonitor
             PerformanceCounter perfSystemCounter = new PerformanceCounter("System", "System Up Time");
             perfSystemCounter.NextValue();
             int seconds_time = (int)perfSystemCounter.NextValue();
-            
-           return (seconds_time/3600).ToString() + "h " + ((seconds_time % 3600) / 60) + "min";
+
+            return (seconds_time / 3600).ToString() + "h " + ((seconds_time % 3600) / 60) + "min";
         }
 
         public string GetComponent(string hwclass, string syntax)
@@ -150,7 +148,7 @@ namespace MemoryMonitor
 
         public string GetDiskSize()
         {
-            return Convert.ToString(ToGBytes(  GetComponent("Win32_LogicalDisk", "Size"))+ "GB");
+            return Convert.ToString(ToGBytes(GetComponent("Win32_LogicalDisk", "Size")) + "GB");
         }
 
         public string GetFreeDiskSpace()
@@ -173,6 +171,14 @@ namespace MemoryMonitor
                 FreeSpace = String.Concat(FreeSpace, "\n");
             }
             return FreeSpace;
+        }
+
+        public double CPUSpeed()
+        {
+            ManagementObject Mo = new ManagementObject("Win32_Processor.DeviceID='CPU0'");
+            uint sp = (uint)(Mo["CurrentClockSpeed"]);
+            Mo.Dispose();
+            return ((double)sp)/1000;
         }
     }
 }

@@ -2,13 +2,20 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:DV="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-
         xmlns:local="clr-namespace:MemoryMonitor"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
-        Title="Monitory report" Height="700" Width="700">
+        Title="Monitory report" Width="Auto" Height="Auto"
+                      Background="Aqua"
+                      ResizeMode="CanResizeWithGrip">
+
+    <Window.DataContext>
+        <local:MemoryViewModel/>
+    </Window.DataContext>
     <Window.Resources>
         <Style x:Key="Grid">
             <Setter Property="Control.Background" Value="#394048" />
@@ -19,27 +26,72 @@
             <Setter Property="Control.FontSize" Value="16"/>
             <Setter Property="Control.Margin" Value="4"/>
         </Style>
+        <Style TargetType="chart:DoughnutChart">
+            <Setter Property="Background" Value="#394048"/>
+            <Setter Property="Foreground" Value="#dcd5f4"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Width" Value="400"/>
+        </Style>
+        <Style TargetType="chart:RadialGaugeChart">
+            <Setter Property="Background" Value="#394048"/>
+            <Setter Property="Foreground" Value="#dcd5f4"/>
+            <Setter Property="FontSize" Value="14"></Setter>
+        </Style>
     </Window.Resources>
-    
     <Grid Style="{StaticResource Grid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"  Margin="20 10 0 0 ">
-                <TextBlock x:Name="StartUpTimeText" >
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5"  Margin="20 10 0 0 ">
+            <TextBlock x:Name="StartUpTimeText" >
                     Time from start up:
-                </TextBlock>
-                <TextBlock x:Name="StartUpTimeText1"  >Time</TextBlock>
+            </TextBlock>
+            <TextBlock x:Name="StartUpTimeText1"  >Time</TextBlock>
         </StackPanel>
-        <Line X1="0" Y1="40" X2="1500" Y2="40" Stroke="#91fffc" Grid.ColumnSpan="3" Opacity="0.7"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="5">
+            <TextBlock Text="CPU:   " Margin="10 12 0 0" FontSize="18"></TextBlock>
+            <ProgressBar Name="CPUProgressBar" BorderThickness="0" Background="#799be9"  Height="20" Width="200">
+            </ProgressBar>
+            <TextBlock Name="TextCPU"  Margin="10 12 0 0"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="5">
+            <TextBlock Text="RAM:   " Margin="10 12 0 0" FontSize="18"></TextBlock>
+            <ProgressBar Name="RAMProgressBar" BorderThickness="0" Background="#799be9"  Height="20" Width="200">
+            </ProgressBar>
+            <TextBlock Name="TextRAM"  Margin="10 12 0 0"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="5" >
+            <chart:DoughnutChart InnerRadiusRatio="0.67" HorizontalAlignment="Center" ChartTitle="RAM:" ChartSubTitle="">
+                <chart:DoughnutChart.Series >
+                    <chart:ChartSeries
+                                       DisplayMember="Name"
+                                       SeriesTitle="RAM"
+                                       ItemsSource="{Binding Path=RAMMemory}"
+                                       ValueMember="Count">
 
+                    </chart:ChartSeries>
+                </chart:DoughnutChart.Series>
+            </chart:DoughnutChart>
+            <chart:RadialGaugeChart ChartTitle="CPU usage:" Name="CpuSpeed">
+                <chart:RadialGaugeChart.Series>
+                    <chart:ChartSeries DisplayMember="Name"
+                            ItemsSource="{Binding Path=CPUspeed}"
+                            SeriesTitle="World smallest populations"
+                            ValueMember="Count" />
+                </chart:RadialGaugeChart.Series>
+            </chart:RadialGaugeChart>
+        </StackPanel>
     </Grid>
 </Window>
