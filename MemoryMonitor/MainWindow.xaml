@@ -73,7 +73,7 @@
             <TextBlock Name="TextRAM"  Margin="10 12 0 0"></TextBlock>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="5" >
-            <chart:DoughnutChart InnerRadiusRatio="0.67" HorizontalAlignment="Center" ChartTitle="RAM:" ChartSubTitle="">
+            <chart:DoughnutChart Name="RAMTitle" InnerRadiusRatio="0.67" HorizontalAlignment="Center" ChartTitle="RAM:" ChartSubTitle="">
                 <chart:DoughnutChart.Series >
                     <chart:ChartSeries
                                        DisplayMember="Name"
@@ -92,6 +92,17 @@
                             ValueMember="Count" />
                 </chart:RadialGaugeChart.Series>
             </chart:RadialGaugeChart>
+            <chart:DoughnutChart Name="DiskTitle" InnerRadiusRatio="0.67" HorizontalAlignment="Center" ChartTitle="Disk:" ChartSubTitle="">
+                <chart:DoughnutChart.Series >
+                    <chart:ChartSeries
+                                       DisplayMember="Name"
+                                       SeriesTitle="RAM"
+                                       ItemsSource="{Binding Path=DiskMemory}"
+                                       ValueMember="Count">
+
+                    </chart:ChartSeries>
+                </chart:DoughnutChart.Series>
+            </chart:DoughnutChart>
         </StackPanel>
     </Grid>
 </Window>

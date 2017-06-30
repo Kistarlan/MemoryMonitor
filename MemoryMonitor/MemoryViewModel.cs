@@ -10,6 +10,15 @@ namespace MemoryMonitor
 {
     class MemoryViewModel
     {
+        private readonly ObservableCollection<Memory> _Disk = new ObservableCollection<Memory>();
+        public ObservableCollection<Memory> DiskMemory
+        {
+            get
+            {
+                return _Disk;
+            }
+        }
+
         private readonly ObservableCollection<Memory> _RAMmemory = new ObservableCollection<Memory>();
         public ObservableCollection<Memory> RAMMemory
         {
@@ -28,6 +37,11 @@ namespace MemoryMonitor
             }
         }
 
+        Memory FreeDisk = new Memory();
+        Memory Disk = new Memory();
+
+
+
         Memory CasheMemory = new Memory();
         Memory AvailableMemory = new Memory();
         Memory UseMemory = new Memory();
@@ -36,13 +50,22 @@ namespace MemoryMonitor
 
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
         public MemoryViewModel()
-        { 
+        {
+            FreeDisk.Count = Data.DiskSpace;
+            Disk.Count = Data.GetDiskSize() - FreeDisk.Count;
+            FreeDisk.Name = "Free disk space";
+            Disk.Name = "Size: " + Data.GetDiskSize() + " GB";
+
+            _Disk.Add(Disk);
+            _Disk.Add(FreeDisk);
+
+
             CPU.Count = Data.GetCurrentCpuUsage();
             CPU.Name = "CPU usage" ;
             CPUspeed.Add(CPU);
 
-            CasheMemory.Count = Math.Round(Data.GetCurrentMemoryAvailability(), 2);
-            AvailableMemory.Count = Math.Round(Data.GetCasheMemory(), 2);
+            AvailableMemory.Count = Math.Round(Data.GetCurrentMemoryAvailability(), 2);
+            CasheMemory.Count = Math.Round(Data.GetCasheMemory(), 2);
             UseMemory.Count = Math.Round(Data.GetTotalRAM() - Data.GetCurrentMemoryAvailability() - Data.GetCasheMemory(), 2);
             CasheMemory.Name = "Cashe ";
             AvailableMemory.Name = "Available ";
@@ -57,10 +80,12 @@ namespace MemoryMonitor
             dispatcherTimer.Start();
         }
 
+
+
+
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             CPU.Count = Data.GetCurrentCpuUsage();
-
 
 
             CasheMemory.Count = Math.Round(Data.GetCurrentMemoryAvailability(), 2);

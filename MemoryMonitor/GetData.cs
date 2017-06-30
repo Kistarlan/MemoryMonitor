@@ -15,6 +15,11 @@ namespace MemoryMonitor
 {
     class GetData
     {
+        public GetData()
+        {
+            GetFreeDiskSpace();
+        }
+
         private object BatteryProperty(string PropertyName)
         {
             Type t = typeof(System.Windows.Forms.PowerStatus);
@@ -35,7 +40,7 @@ namespace MemoryMonitor
         {
             Int64 Memory;
             Int64.TryParse(memory, out Memory);
-            return ((int)(((double)Memory) / 1024 / 1024 / 1024)).ToString();
+            return (Math.Round((((double)Memory) / 1024 / 1024 / 1024),2)).ToString();
         }
 
         public double ToGBytes(float memory)
@@ -146,10 +151,14 @@ namespace MemoryMonitor
             return GetComponent("Win32_PhysicalMemory", "Name");
         }
 
-        public string GetDiskSize()
+        public double GetDiskSize()
         {
-            return Convert.ToString(ToGBytes(GetComponent("Win32_LogicalDisk", "Size")) + "GB");
+            double disksize;
+            Double.TryParse(GetComponent("Win32_LogicalDisk", "Size"), out disksize);
+            return ToGBytes((float)disksize);
         }
+
+        double diskspace = 0;
 
         public string GetFreeDiskSpace()
         {
@@ -163,14 +172,25 @@ namespace MemoryMonitor
 
             string FreeSpace = "";
 
-            foreach (ManagementObject objDisk in colDisks)
+            foreach (ManagementObject objDisk in colDisks)  
             {
                 FreeSpace = String.Concat(FreeSpace, objDisk["DeviceID"] + " ");
                 string temp = string.Concat(objDisk["FreeSpace"]);
                 FreeSpace = String.Concat(FreeSpace, ToGBytes(temp) + "GB");
                 FreeSpace = String.Concat(FreeSpace, "\n");
+                double t;
+                Double.TryParse( ToGBytes(temp), out t);
+                diskspace += t;
             }
             return FreeSpace;
+        }
+
+        public double DiskSpace
+        {
+            get
+            {
+                return diskspace;
+            }
         }
 
         public double CPUSpeed()

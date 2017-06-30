@@ -83,22 +83,23 @@ namespace MemoryMonitor
             //showColumnChart();
 
             //System_Data();
-
+            RAMTitle.ChartSubTitle = "Total RAM: " + Data.GetTotalRAM() + "GB";
             CpuSpeed.ChartSubTitle ="Maximum speed: " + Data.CPUSpeed().ToString() + " GHz";
+            //DiskTitle.ChartSubTitle = "Size: " + Data.GetDiskSize() + " GB";
             dispatcherTimer.Start();
         }
 
 
         private void System_Data()
         {
-            //textBlock1.Text = ("CPU: " + Data.Processor() + "\nPhysical Memory: " + Data.PhysicalMemoryName() +
-            //    "\nVideo Controller: " + Data.VideoController() +
-            //    "\nDisk mamory: " + Data.GetDiskSize() +
-            //    "\nFree space: " + Data.GetFreeDiskSpace() +
-            //    "\nCharge Status: " + Data.GetChargeStatus() +
-            //    "\nRemaining Time: " + Data.GetChargeTime() +
-            //    "\nPool Page Gb: " + Data.GetPageMemory() +
-            //    "\nNon Pool Page Gb: " + Data.GetNPageMemory());
+            MessageBox.Show("CPU: " + Data.GetCurrentCpuUsage() + "\nPhysical Memory: " + Data.GetPhysicalMemoryName() +
+                "\nVideo Controller: " + Data.GetVideoControllerName() +
+                //"\nDisk mamory: " + Data.GetDiskSize() +
+                "\nFree space: " + Data.GetFreeDiskSpace() +
+                "\nCharge Status: " + Data.GetChargeStatus() +
+                "\nRemaining Time: " + Data.GetChargeTime() +
+                "\nPool Page Gb: " + Data.GetPageMemory() +
+                "\nNon Pool Page Gb: " + Data.GetNPageMemory());
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
