@@ -8,24 +8,26 @@ using System.Threading.Tasks;
 
 namespace MemoryMonitor
 {
-    class Memory : INotifyPropertyChanged
+    class CPUUsage : INotifyPropertyChanged
     {
-        private string _name = string.Empty;
-        private string _text = string.Empty;
+        private int _time = 0;
         private double _count = 0;
 
-        public string Name
+
+
+        public int ThisTime
         {
             get
             {
-                return _name;
+                return _time;
             }
             set
             {
-                _name = value;
-                NotifyPropertyChanged("Name");
+                _time = value;
+                NotifyPropertyChanged("Time");
             }
         }
+
         public double Count
         {
             get
@@ -40,19 +42,6 @@ namespace MemoryMonitor
 
         }
 
-
-        public string Text
-        {
-            get
-            {
-                return _text;
-            }
-            set
-            {
-                _text = value;
-                NotifyPropertyChanged("Text");
-            }
-        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")

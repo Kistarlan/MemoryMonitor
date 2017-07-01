@@ -142,8 +142,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CPU.cs" />
     <Compile Include="Memory.cs" />
+    <Compile Include="MemoryChart.xaml.cs">
+      <DependentUpon>MemoryChart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MemoryViewModel.cs" />
+    <Compile Include="Time.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -158,6 +163,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MemoryChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

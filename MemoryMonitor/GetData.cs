@@ -133,6 +133,7 @@ namespace MemoryMonitor
                 Name = String.Concat(Name, Convert.ToString(mj[syntax]));
                 Name = String.Concat(Name, " ");
             }
+            //System.Windows.MessageBox.Show(Name);
             return Name;
         }
 
@@ -154,7 +155,8 @@ namespace MemoryMonitor
         public double GetDiskSize()
         {
             double disksize;
-            Double.TryParse(GetComponent("Win32_LogicalDisk", "Size"), out disksize);
+            double.TryParse(GetComponent("Win32_LogicalDisk", "Size"), out disksize);
+
             return ToGBytes((float)disksize);
         }
 

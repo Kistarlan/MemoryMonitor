@@ -61,31 +61,19 @@ namespace MemoryMonitor
         
         //PerformanceCounter perfSwapFileCounter = new PerformanceCounter("Swap File", "% Usage", "\\??\\C:\\paqefile.sys");
         GetData Data = new GetData();
-
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         public MainWindow()
         {
             InitializeComponent();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0,0,0,0,100);
+            dispatcherTimer.Interval = new TimeSpan(0,0,0,0,10);
             //StartUpTimeText.Text = " " + Data.GetTimeWorkSystem() + " Hours";
             StartUpTimeText1.Text = " " + Data.GetTimeWorkSystem();
             //MessageBox.Show("Cashe: " + Data.GetCasheMemory() + 
             //    "\nCommited mamory: " + Data.GetCommitedGB() + "/" + Data.GetMaxCommitedGB());
-            //MessageBox.Show(Data.GetTotalRAM().ToString());
-            //timer.Interval = TimeSpan.FromSeconds(1);
-            //timer.Tick += TimeChanged;
-            //timer.Start();
-
-            //showColumnChart();
-
-            //System_Data();
+            ComputerName.Text ="Computer name: " + Environment.MachineName;
+            
             RAMTitle.ChartSubTitle = "Total RAM: " + Data.GetTotalRAM() + "GB";
             CpuSpeed.ChartSubTitle ="Maximum speed: " + Data.CPUSpeed().ToString() + " GHz";
-            //DiskTitle.ChartSubTitle = "Size: " + Data.GetDiskSize() + " GB";
             dispatcherTimer.Start();
         }
 
@@ -94,7 +82,7 @@ namespace MemoryMonitor
         {
             MessageBox.Show("CPU: " + Data.GetCurrentCpuUsage() + "\nPhysical Memory: " + Data.GetPhysicalMemoryName() +
                 "\nVideo Controller: " + Data.GetVideoControllerName() +
-                //"\nDisk mamory: " + Data.GetDiskSize() +
+                "\nDisk mamory: " + Data.GetDiskSize() +
                 "\nFree space: " + Data.GetFreeDiskSpace() +
                 "\nCharge Status: " + Data.GetChargeStatus() +
                 "\nRemaining Time: " + Data.GetChargeTime() +
@@ -104,8 +92,8 @@ namespace MemoryMonitor
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            CPUProgressBar.Value = Data.GetCurrentCpuUsage();
-            TextCPU.Text = System.String.Format("{0,3:N2}%",CPUProgressBar.Value);
+            //CPUProgressBar.Value = Data.GetCurrentCpuUsage();
+            //TextCPU.Text = System.String.Format("{0,3:N2}%",CPUProgressBar.Value);
             RAMProgressBar.Value = Data.GetCommitedInUse();
             TextRAM.Text = System.String.Format("{0,3:N2}%", RAMProgressBar.Value);
         }
