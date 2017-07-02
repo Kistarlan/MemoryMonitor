@@ -26,46 +26,14 @@ namespace MemoryMonitor
     /// </summary>
     public partial class MainWindow :Window
     {
-        ObservableCollection<KeyValuePair<DateTime, float>> valueList = new ObservableCollection<KeyValuePair<DateTime, float>>();
-        private void showColumnChart()
-        {
-            //Setting data for line chart
-           //CPUlineChart.DataContext = valueList;
-        }
-
-        public delegate void CPUEventHandler(object sender, float args);
-        public event CPUEventHandler CPUEvent;
-
-        DispatcherTimer timer = new DispatcherTimer();
-
-        private static float cpuCurrent;
-
-        void TriggerCPUEvent(float args)
-        {
-            if (CPUEvent != null)
-            {
-                CPUEvent(this, args);
-            }
-        }
+       
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
-        public void TimeChanged(object sender, EventArgs e)
-        {
-            cpuCurrent = (float)Data.GetCurrentCpuUsage();
-
-            TriggerCPUEvent(cpuCurrent);
-
-            valueList.Add(new KeyValuePair<DateTime, float>(DateTime.Now, cpuCurrent));
-        }
-
-        
-        
-        //PerformanceCounter perfSwapFileCounter = new PerformanceCounter("Swap File", "% Usage", "\\??\\C:\\paqefile.sys");
         GetData Data = new GetData();
         public MainWindow()
         {
             InitializeComponent();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0,0,0,0,10);
+            dispatcherTimer.Interval = new TimeSpan(0,0,0,0,100);
             //StartUpTimeText.Text = " " + Data.GetTimeWorkSystem() + " Hours";
             StartUpTimeText1.Text = " " + Data.GetTimeWorkSystem();
             //MessageBox.Show("Cashe: " + Data.GetCasheMemory() + 
@@ -74,12 +42,16 @@ namespace MemoryMonitor
             UserName.Text = "User name: " + Environment.UserName;
             RAMTitle.ChartSubTitle = "Total RAM: " + Data.GetTotalRAM() + "GB";
             CpuSpeed.ChartSubTitle ="Maximum speed: " + Data.CPUSpeed().ToString() + " GHz";
+            ProcessorsCount.Text = "Logical processors: " + Data.LogicalProcessors;
+            ProcessorName.Text = Data.GetProcessorName();
             dispatcherTimer.Start();
+            Memory_Data();
         }
 
 
-        private void System_Data()
+        private void Memory_Data()
         {
+            
             MessageBox.Show("CPU: " + Data.GetCurrentCpuUsage() + "\nPhysical Memory: " + Data.GetPhysicalMemoryName() +
                 "\nVideo Controller: " + Data.GetVideoControllerName() +
                 "\nDisk mamory: " + Data.GetDiskSize() +
@@ -92,6 +64,14 @@ namespace MemoryMonitor
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            ProcessesCount.Text = "Processes: " + Data.ProcessCount().ToString();
+            ProcessorUtilization.Text = "Utilization: " + Data.CPUUtilization + "%";
+            RAMUse.Text = "In use: " + Math.Round((Data.GetTotalRAM() - Data.GetCurrentMemoryAvailability()), 1) + " GB";
+            RAMAvailable.Text = "Available: " + Math.Round(Data.GetCurrentMemoryAvailability(), 2) + " GB";
+            Commited.Text = "Commited: " + Data.GetCommitedGB() + "/" + Data.GetMaxCommitedGB() + " GB";
+            PagedPool.Text = "Paged pool: " + Data.GetPageMemory() + "MB";
+            NonPagedPool.Text = "Non-paged pool: " + Data.GetNPageMemory() + "MB";
+            Cashed.Text = "Cahsed: " + Data.GetCasheMemory() + "GB";
             //CPUProgressBar.Value = Data.GetCurrentCpuUsage();
             //TextCPU.Text = System.String.Format("{0,3:N2}%",CPUProgressBar.Value);
             //RAMProgressBar.Value = Data.GetCommitedInUse();

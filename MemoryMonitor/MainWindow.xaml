@@ -13,7 +13,6 @@
         Title="Monitory report" Width="1200" Height="1000"
                       Background="Aqua"
                       ResizeMode="CanResizeWithGrip"
-                      
                         >
 
     <Window.DataContext>
@@ -47,7 +46,7 @@
     <Grid Style="{StaticResource Grid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"></RowDefinition>
-            <RowDefinition Height="300"></RowDefinition>
+            <RowDefinition Height="310"></RowDefinition>
             <RowDefinition Height="170"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -55,7 +54,7 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="300"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -79,7 +78,7 @@
         </StackPanel>
         -->
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="5" Grid.RowSpan="2" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="5" Grid.RowSpan="2" HorizontalAlignment="Center" Margin="0 15">
                 <chart:RadialGaugeChart  ChartTitle="CPU usage:" Name="CpuSpeed"
                                         >
                     <chart:RadialGaugeChart.Series>
@@ -126,13 +125,27 @@
                     <TextBlock x:Name="UserName" Margin="50 0"/>
                 </StackPanel>
             </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Vertical" Grid.ColumnSpan="5" HorizontalAlignment="Center">
+
+            <StackPanel Grid.Row="2" Grid.Column="0" Margin="20 0 0 0" Grid.ColumnSpan="2">
+                <TextBlock Name="ProcessorName"/>
+                <TextBlock Name="ProcessesCount"/>
+                <TextBlock Name="ProcessorsCount"/>
+                <TextBlock Name="ProcessorUtilization"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Vertical" Grid.ColumnSpan="5" HorizontalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center">CPU</TextBlock>
+                <local:MemoryChart x:Name="memoryChart" VerticalAlignment="Top"  HorizontalAlignment="Right" Width="auto" />
             
-            <TextBlock HorizontalAlignment="Center">CPU</TextBlock>
-            <local:MemoryChart x:Name="memoryChart" VerticalAlignment="Top"  HorizontalAlignment="Right" Width="auto" />
-            
-        </StackPanel>
-        <StackPanel Grid.Row="4" Orientation="Vertical" Grid.ColumnSpan="5" HorizontalAlignment="Center">
+            </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="0" Margin="20 0 0 0" Grid.ColumnSpan="2">
+                <TextBlock Name="RAMUse"/>
+                <TextBlock Name="RAMAvailable"/>
+                <TextBlock Name="Commited"/>
+                <TextBlock Name="Cashed"/>
+                <TextBlock Name="PagedPool"/>
+                <TextBlock Name="NonPagedPool"/>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Orientation="Vertical" Grid.ColumnSpan="5" HorizontalAlignment="Center">
             <TextBlock HorizontalAlignment="Center">RAM</TextBlock>
             <local:RAMChart x:Name="RAMChart" VerticalAlignment="Top"  HorizontalAlignment="Right" Width="auto" />
         </StackPanel>

@@ -10,6 +10,8 @@ using System.Management;
 using System.Windows.Forms;
 using System.Reflection;
 using Microsoft.VisualBasic.Devices;
+using System.Collections;
+using Microsoft.Win32;
 
 namespace MemoryMonitor
 {
@@ -45,7 +47,11 @@ namespace MemoryMonitor
 
         public double ToGBytes(float memory)
         {
-            return Math.Round(((double)(memory) / 1024 / 1024 / 1024), 2);
+            return Math.Round(((double)(memory) / 1024 / 1024 / 1024), 1);
+        }
+        public double ToMBytes(float memory)
+        {
+            return Math.Round(((double)(memory) / 1024 / 1024 ));
         }
         public string GetChargeStatus()
         {
@@ -69,7 +75,7 @@ namespace MemoryMonitor
         PerformanceCounter perfPageBCounter = new PerformanceCounter("Memory", "Pool Paged Bytes", null);
         public double GetPageMemory()
         {
-            return ToGBytes(perfPageBCounter.NextValue());
+            return ToMBytes(perfPageBCounter.NextValue());
         }
         PerformanceCounter perfCasheCounter = new PerformanceCounter("Memory", "Cache Bytes", null);
         public double GetCasheMemory()
@@ -79,7 +85,7 @@ namespace MemoryMonitor
         PerformanceCounter perfNPageBCounter = new PerformanceCounter("Memory", "Pool Nonpaged Bytes", null);
         public double GetNPageMemory()
         {
-            return ToGBytes(perfNPageBCounter.NextValue());
+            return ToMBytes(perfNPageBCounter.NextValue());
         }
 
         PerformanceCounter perfCommitCounter = new PerformanceCounter("Memory", "Committed Bytes", null);
@@ -201,6 +207,37 @@ namespace MemoryMonitor
             uint sp = (uint)(Mo["CurrentClockSpeed"]);
             Mo.Dispose();
             return ((double)sp)/1000;
+        }
+
+        
+
+        public int ProcessCount()
+        {
+
+                Process[] _processes =Process.GetProcesses();
+                return _processes.Count();
+        }
+
+        public double GetCpuClockSpeed()
+        {
+            return (double)((int)Registry.GetValue(@"HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0", "~MHz", 0))/1000;
+        }
+
+        private PerformanceCounter _cpuUtilityCounter = new PerformanceCounter("Processor Information", "% Processor Utility", "_Total");
+        public int CPUUtilization
+        {
+            get
+            {
+                return (int)_cpuUtilityCounter.NextValue();
+            }
+        }
+
+        public int LogicalProcessors
+        {
+            get
+            {
+                return Environment.ProcessorCount;
+            }
         }
     }
 }
