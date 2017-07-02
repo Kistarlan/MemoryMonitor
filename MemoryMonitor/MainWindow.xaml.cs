@@ -71,7 +71,7 @@ namespace MemoryMonitor
             //MessageBox.Show("Cashe: " + Data.GetCasheMemory() + 
             //    "\nCommited mamory: " + Data.GetCommitedGB() + "/" + Data.GetMaxCommitedGB());
             ComputerName.Text ="Computer name: " + Environment.MachineName;
-            
+            UserName.Text = "User name: " + Environment.UserName;
             RAMTitle.ChartSubTitle = "Total RAM: " + Data.GetTotalRAM() + "GB";
             CpuSpeed.ChartSubTitle ="Maximum speed: " + Data.CPUSpeed().ToString() + " GHz";
             dispatcherTimer.Start();
@@ -94,8 +94,8 @@ namespace MemoryMonitor
         {
             //CPUProgressBar.Value = Data.GetCurrentCpuUsage();
             //TextCPU.Text = System.String.Format("{0,3:N2}%",CPUProgressBar.Value);
-            RAMProgressBar.Value = Data.GetCommitedInUse();
-            TextRAM.Text = System.String.Format("{0,3:N2}%", RAMProgressBar.Value);
+            //RAMProgressBar.Value = Data.GetCommitedInUse();
+            //TextRAM.Text = System.String.Format("{0,3:N2}%", RAMProgressBar.Value);
         }
 
     }

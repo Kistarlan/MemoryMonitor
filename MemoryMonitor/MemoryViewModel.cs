@@ -78,7 +78,7 @@ namespace MemoryMonitor
 
 
             CPU.Count = Data.GetCurrentCpuUsage();
-            CPU.Name = "CPU usage" ;
+            //CPU.Name = "CPU usage" ;
             CPUspeed.Add(CPU);
 
             AvailableMemory.Count = Math.Round(Data.GetCurrentMemoryAvailability(), 2);
@@ -105,8 +105,8 @@ namespace MemoryMonitor
             CPU.Count = Data.GetCurrentCpuUsage();
             _CPUUsage.Add(new CPUUsage() { Count = Data.GetCurrentCpuUsage()});
 
-            CasheMemory.Count = Math.Round(Data.GetCurrentMemoryAvailability(), 2);
-            AvailableMemory.Count = Math.Round(Data.GetCasheMemory(), 2);
+            AvailableMemory.Count = Math.Round(Data.GetCurrentMemoryAvailability(), 2);
+            CasheMemory.Count = Math.Round(Data.GetCasheMemory(), 2);
             UseMemory.Count = Math.Round(Data.GetTotalRAM() - Data.GetCurrentMemoryAvailability() - Data.GetCasheMemory(), 2);
         }
     }

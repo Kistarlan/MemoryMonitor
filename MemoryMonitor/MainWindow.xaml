@@ -12,7 +12,9 @@
         mc:Ignorable="d"
         Title="Monitory report" Width="1200" Height="1000"
                       Background="Aqua"
-                      ResizeMode="CanResizeWithGrip">
+                      ResizeMode="CanResizeWithGrip"
+                      
+                        >
 
     <Window.DataContext>
         <local:MemoryViewModel/>
@@ -30,20 +32,25 @@
         <Style TargetType="chart:DoughnutChart">
             <Setter Property="Background" Value="#394048"/>
             <Setter Property="Foreground" Value="#dcd5f4"/>
-            <Setter Property="FontSize" Value="14"/>
             <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="350"/>
         </Style>
         <Style TargetType="chart:RadialGaugeChart">
             <Setter Property="Background" Value="#394048"/>
             <Setter Property="Foreground" Value="#dcd5f4"/>
-            <Setter Property="FontSize" Value="14"></Setter>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="350"/>
+            <Setter Property="Width" Value="auto"/>
         </Style>
     </Window.Resources>
+        <ScrollViewer>
     <Grid Style="{StaticResource Grid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="300"></RowDefinition>
+            <RowDefinition Height="170"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
@@ -54,33 +61,36 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
+            
 
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5"  Margin="20 10 0 0 ">
-            <StackPanel Orientation="Horizontal">
-            <TextBlock x:Name="StartUpTimeText" >
-                    Time from start up:
-            </TextBlock>
-            <TextBlock x:Name="StartUpTimeText1"  >Time</TextBlock>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="50 0">
-                <TextBlock x:Name="ComputerName" >
-                    
-                </TextBlock>
-            </StackPanel>
-        </StackPanel>
+        
+        <!--
         <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="5">
-            <TextBlock Text="CPU:    " Margin="10 12 0 0" FontSize="18"></TextBlock>
-            <ProgressBar Name="CPUProgressBar" BorderThickness="0" Background="#799be9"  Height="20" Width="200">
-            </ProgressBar>
+            <TextBlock Text="RAM:    " Margin="10 12 0 0" FontSize="18"></TextBlock>
+            <ProgressBar Name="CPUProgressBar" BorderThickness="0" Background="#799be9"  Height="20" Width="200"/>
             <TextBlock Name="TextCPU"  Margin="10 12 0 0"></TextBlock>
         </StackPanel>
+     
         <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="5">
             <TextBlock Text="RAM:   " Margin="10 12 0 0" FontSize="18"></TextBlock>
             <ProgressBar Name="RAMProgressBar" BorderThickness="0" Background="#799be9"  Height="20" Width="200">
             </ProgressBar>
             <TextBlock Name="TextRAM"  Margin="10 12 0 0"></TextBlock>
         </StackPanel>
-        <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="5" HorizontalAlignment="Center">
+        -->
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="5" Grid.RowSpan="2" HorizontalAlignment="Center">
+                <chart:RadialGaugeChart  ChartTitle="CPU usage:" Name="CpuSpeed"
+                                        >
+                    <chart:RadialGaugeChart.Series>
+                    <chart:ChartSeries
+                            DisplayMember="Name"
+                            ItemsSource="{Binding Path=CPUspeed}"
+                            SeriesTitle="CPUUSage"
+                            ValueMember="Count" 
+                            />
+                </chart:RadialGaugeChart.Series>
+            </chart:RadialGaugeChart>
             <chart:DoughnutChart Name="RAMTitle" InnerRadiusRatio="0.67" HorizontalAlignment="Center" ChartTitle="RAM:" ChartSubTitle="">
                 <chart:DoughnutChart.Series >
                     <chart:ChartSeries
@@ -92,14 +102,7 @@
                     </chart:ChartSeries>
                 </chart:DoughnutChart.Series>
             </chart:DoughnutChart>
-            <chart:RadialGaugeChart ChartTitle="CPU usage:" Name="CpuSpeed">
-                <chart:RadialGaugeChart.Series>
-                    <chart:ChartSeries DisplayMember="Name"
-                            ItemsSource="{Binding Path=CPUspeed}"
-                            SeriesTitle="CPUUSage"
-                            ValueMember="Count" />
-                </chart:RadialGaugeChart.Series>
-            </chart:RadialGaugeChart>
+           
             <chart:DoughnutChart Name="DiskTitle" InnerRadiusRatio="0.67" HorizontalAlignment="Center" ChartTitle="Disk:" ChartSubTitle="">
                 <chart:DoughnutChart.Series >
                     <chart:ChartSeries
@@ -111,10 +114,29 @@
                 </chart:DoughnutChart.Series>
             </chart:DoughnutChart>
         </StackPanel>
-
-        <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="5" HorizontalAlignment="Center">
-            <TextBlock >CPU:</TextBlock>
-            <local:MemoryChart x:Name="memoryChart" VerticalAlignment="Top" Margin="0,51,9,0" HorizontalAlignment="Right" Width="auto" />
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" >
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="StartUpTimeText" >
+                    Time from start up:
+                    </TextBlock>
+                    <TextBlock x:Name="StartUpTimeText1"  >Time</TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="ComputerName" Margin="50 0"/>
+                    <TextBlock x:Name="UserName" Margin="50 0"/>
+                </StackPanel>
+            </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Vertical" Grid.ColumnSpan="5" HorizontalAlignment="Center">
+            
+            <TextBlock HorizontalAlignment="Center">CPU</TextBlock>
+            <local:MemoryChart x:Name="memoryChart" VerticalAlignment="Top"  HorizontalAlignment="Right" Width="auto" />
+            
         </StackPanel>
+        <StackPanel Grid.Row="4" Orientation="Vertical" Grid.ColumnSpan="5" HorizontalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center">RAM</TextBlock>
+            <local:RAMChart x:Name="RAMChart" VerticalAlignment="Top"  HorizontalAlignment="Right" Width="auto" />
+        </StackPanel>
+
     </Grid>
+    </ScrollViewer>
 </Window>

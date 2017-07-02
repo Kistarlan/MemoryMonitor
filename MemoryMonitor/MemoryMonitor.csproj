@@ -84,6 +84,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Management" />
     <Reference Include="System.Numerics" />
@@ -148,6 +149,9 @@
       <DependentUpon>MemoryChart.xaml</DependentUpon>
     </Compile>
     <Compile Include="MemoryViewModel.cs" />
+    <Compile Include="RAMChart.xaml.cs">
+      <DependentUpon>RAMChart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Time.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -164,6 +168,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MemoryChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RAMChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
