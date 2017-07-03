@@ -87,6 +87,7 @@ namespace MemoryMonitor
             CasheMemory.Name = "Cashe ";
             AvailableMemory.Name = "Available ";
             UseMemory.Name = "Use memory";
+
             _RAMmemory.Add(CasheMemory);
             _RAMmemory.Add(UseMemory);
             _RAMmemory.Add(AvailableMemory);
@@ -102,12 +103,17 @@ namespace MemoryMonitor
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            FreeDisk.Count = Data.DiskSpace;
+            Disk.Count = Data.GetDiskSize() - FreeDisk.Count;
+
+
             CPU.Count = Data.GetCurrentCpuUsage();
             _CPUUsage.Add(new CPUUsage() { Count = Data.GetCurrentCpuUsage()});
 
             AvailableMemory.Count = Math.Round(Data.GetCurrentMemoryAvailability(), 2);
             CasheMemory.Count = Math.Round(Data.GetCasheMemory(), 2);
             UseMemory.Count = Math.Round(Data.GetTotalRAM() - Data.GetCurrentMemoryAvailability() - Data.GetCasheMemory(), 2);
+
         }
     }
 }
