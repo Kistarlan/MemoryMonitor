@@ -53,30 +53,13 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-            
-
-        
-        <!--
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="5">
-            <TextBlock Text="RAM:    " Margin="10 12 0 0" FontSize="18"></TextBlock>
-            <ProgressBar Name="CPUProgressBar" BorderThickness="0" Background="#799be9"  Height="20" Width="200"/>
-            <TextBlock Name="TextCPU"  Margin="10 12 0 0"></TextBlock>
-        </StackPanel>
-     
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="5">
-            <TextBlock Text="RAM:   " Margin="10 12 0 0" FontSize="18"></TextBlock>
-            <ProgressBar Name="RAMProgressBar" BorderThickness="0" Background="#799be9"  Height="20" Width="200">
-            </ProgressBar>
-            <TextBlock Name="TextRAM"  Margin="10 12 0 0"></TextBlock>
-        </StackPanel>
-        -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="5" Grid.RowSpan="2" HorizontalAlignment="Center" Margin="0 15">
                 <chart:RadialGaugeChart  ChartTitle="CPU usage:" Name="CpuSpeed"

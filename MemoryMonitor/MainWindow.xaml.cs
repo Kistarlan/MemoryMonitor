@@ -34,10 +34,7 @@ namespace MemoryMonitor
             InitializeComponent();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0,0,0,0,100);
-            //StartUpTimeText.Text = " " + Data.GetTimeWorkSystem() + " Hours";
             StartUpTimeText1.Text = " " + Data.GetTimeWorkSystem();
-            //MessageBox.Show("Cashe: " + Data.GetCasheMemory() + 
-            //    "\nCommited mamory: " + Data.GetCommitedGB() + "/" + Data.GetMaxCommitedGB());
             ComputerName.Text ="Computer name: " + Environment.MachineName;
             UserName.Text = "User name: " + Environment.UserName;
             RAMTitle.ChartSubTitle = "Total RAM: " + Data.GetTotalRAM() + "GB";
@@ -45,22 +42,22 @@ namespace MemoryMonitor
             ProcessorsCount.Text = "Logical processors: " + Data.LogicalProcessors;
             ProcessorName.Text = Data.GetProcessorName();
             dispatcherTimer.Start();
-            Memory_Data();
+
         }
 
-
-        private void Memory_Data()
-        {
+ 
+        //private void Memory_Data()
+        //{
             
-            MessageBox.Show("CPU: " + Data.GetCurrentCpuUsage() + "\nPhysical Memory: " + Data.GetPhysicalMemoryName() +
-                "\nVideo Controller: " + Data.GetVideoControllerName() +
-                "\nDisk mamory: " + Data.GetDiskSize() +
-                "\nFree space: " + Data.GetFreeDiskSpace() +
-                "\nCharge Status: " + Data.GetChargeStatus() +
-                "\nRemaining Time: " + Data.GetChargeTime() +
-                "\nPool Page Gb: " + Data.GetPageMemory() +
-                "\nNon Pool Page Gb: " + Data.GetNPageMemory());
-        }
+        //    MessageBox.Show("CPU: " + Data.GetCurrentCpuUsage() + "\nPhysical Memory: " + Data.GetPhysicalMemoryName() +
+        //        "\nVideo Controller: " + Data.GetVideoControllerName() +
+        //        "\nDisk mamory: " + Data.GetDiskSize() +
+        //        "\nFree space: " + Data.GetFreeDiskSpace() +
+        //        "\nCharge Status: " + Data.GetChargeStatus() +
+        //        "\nRemaining Time: " + Data.GetChargeTime() +
+        //        "\nPool Page Gb: " + Data.GetPageMemory() +
+        //        "\nNon Pool Page Gb: " + Data.GetNPageMemory());
+        //}
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -72,10 +69,7 @@ namespace MemoryMonitor
             PagedPool.Text = "Paged pool: " + Data.GetPageMemory() + "MB";
             NonPagedPool.Text = "Non-paged pool: " + Data.GetNPageMemory() + "MB";
             Cashed.Text = "Cahsed: " + Data.GetCasheMemory() + "GB";
-            //CPUProgressBar.Value = Data.GetCurrentCpuUsage();
-            //TextCPU.Text = System.String.Format("{0,3:N2}%",CPUProgressBar.Value);
-            //RAMProgressBar.Value = Data.GetCommitedInUse();
-            //TextRAM.Text = System.String.Format("{0,3:N2}%", RAMProgressBar.Value);
+
         }
 
     }
